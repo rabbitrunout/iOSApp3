@@ -1,92 +1,69 @@
-⏱ FocusTimerPlus — Smart Focus Timer for Apple Watch
+# ⏱ FocusTimerPlus — Smart Focus Timer for Apple Watch  
 
-A minimalistic yet powerful focus timer built for Apple Watch, designed to help you stay productive and mindful during work, study, or meditation sessions.
-With neon visuals, category-based tracking, and achievement streaks, FocusTimerPlus makes every minute count — right from your wrist.
+Stay productive and mindful with **FocusTimerPlus**, a beautifully designed focus timer built for Apple Watch.  
+Choose your focus category, track achievements, and visualize your weekly progress — all from your wrist.
 
-✨ Features
-🧘 Focus Categories
+---
 
-Choose your focus type before each session:
+## 🏠 Main Screen  
 
-💻 Work – Stay productive at your desk
+![Main Timer Screen](assets/images/focus_timer_main.png)
 
-📚 Study – Stay consistent with learning
+Focus view with circular progress ring, glowing category accent, and one-tap Start/Pause control.  
+Easily adjust session length with Digital Crown or +/− buttons.
 
-🧘 Meditation – Take mindful breaks
+---
 
-Each category has its own color theme and icon, displayed on the timer ring.
+## ⚙️ Settings Screen  
 
-🕓 Elegant Timer
+![Settings Screen](assets/images/focus_timer_settings.png)
 
-Circular animated progress ring
+Customize your default session duration, theme (Dark / Light / System), and haptic feedback preferences.
 
-Adjustable duration via Digital Crown or +/- buttons
+---
 
-Neon-style glowing interface optimized for watchOS
+## 🧘 Focus Categories  
 
-Auto-save of previous session times
+![Focus Categories](assets/images/focus_timer_categories.png)
 
-🎯 Achievements & Streaks
+Choose your focus mode:
+- 💻 **Work** — Boost productivity  
+- 📚 **Study** — Stay focused during learning  
+- 🧘 **Meditation** — Mindful relaxation sessions  
 
-Unlock achievements as you complete focus sessions
+Each category changes the **timer ring color** and app accent dynamically.
 
-Track your streaks and total focus time
+---
 
-Visual “congratulations” animation after each finished session
+## 🏆 Achievements & Streaks  
 
-📊 History & Statistics
+![Achievements Screen](assets/images/focus_timer_achievements.png)
 
-View all past sessions in one clean list
+Earn badges as you complete sessions and maintain daily focus streaks.  
+Your history is color-coded by category, making it easy to visualize your habits.
 
-Each entry is color-coded by focus category
+---
 
-Weekly summary graph to see your productivity trends
+## 📊 History & Weekly Trends  
 
-⚙️ Settings
+![History Screen](assets/images/focus_timer_history.png)
 
-Customize default timer length
+All completed sessions are stored and displayed with colored bars representing different focus types.  
+Track your total minutes and weekly productivity trends.
 
-Toggle haptics and feedback
+---
 
-Choose between light, dark, or system theme
+## 🧩 Tech Stack  
+- **SwiftUI** for native watchOS interface  
+- **Combine** for reactive timer state  
+- **Charts Framework** for history visualization  
+- **WidgetKit** for complications and data refresh  
+- **UserDefaults + Codable** for local persistence  
 
-🪄 Tech Stack
+---
 
-SwiftUI (100% native UI for watchOS)
+## 🚀 Getting Started  
 
-Combine for reactive timer state updates
-
-Charts Framework for history visualization
-
-WidgetKit for quick data refresh
-
-Local Storage (UserDefaults + Codable)
-
-💡 Future Enhancements
-
-iPhone companion app with synchronization
-
-CloudKit data sync
-
-Dynamic complications for Watch faces
-
-Smart reminders for focus streaks
-
-🚀 How to Run
-
-Clone the repository:
-
-git clone https://github.com/yourusername/FocusTimerPlus.git
-
-
-Open FocusTimerPlus.xcodeproj in Xcode 15+.
-
-Select Apple Watch Simulator (Series 9 or later).
-
-Run the app — and start your first focus session.
-
-🧑‍💻 Author
-
-Irina Safronova
-📍 Toronto, Canada
-🎓 Mobile & Web Developer Student @ triOS College
+1. Clone the repository  
+   ```bash
+   git clone https://github.com/yourusername/FocusTimerPlus.git
