@@ -7,7 +7,7 @@ Choose your focus category, track achievements, and visualize your weekly progre
 
 ## 🏠 Main Screen  
 
-![Main Timer Screen](assets/images/focus_timer_main.png)
+![Main Timer Screen](assets/1.png)
 
 Focus view with circular progress ring, glowing category accent, and one-tap Start/Pause control.  
 Easily adjust session length with Digital Crown or +/− buttons.
@@ -16,7 +16,7 @@ Easily adjust session length with Digital Crown or +/− buttons.
 
 ## ⚙️ Settings Screen  
 
-![Settings Screen](assets/images/focus_timer_settings.png)
+![Settings Screen](assets/7.png) (![Settings Screen](assets/8.png)
 
 Customize your default session duration, theme (Dark / Light / System), and haptic feedback preferences.
 
@@ -24,7 +24,7 @@ Customize your default session duration, theme (Dark / Light / System), and hapt
 
 ## 🧘 Focus Categories  
 
-![Focus Categories](assets/images/focus_timer_categories.png)
+![Focus Categories](assets/2.png)
 
 Choose your focus mode:
 - 💻 **Work** — Boost productivity  
@@ -35,18 +35,10 @@ Each category changes the **timer ring color** and app accent dynamically.
 
 ---
 
-## 🏆 Achievements & Streaks  
-
-![Achievements Screen](assets/images/focus_timer_achievements.png)
-
-Earn badges as you complete sessions and maintain daily focus streaks.  
-Your history is color-coded by category, making it easy to visualize your habits.
-
----
-
 ## 📊 History & Weekly Trends  
 
-![History Screen](assets/images/focus_timer_history.png)
+![History Screen](assets/11.png)
+![History Screen](assets/12.png)
 
 All completed sessions are stored and displayed with colored bars representing different focus types.  
 Track your total minutes and weekly productivity trends.
@@ -66,4 +58,4 @@ Track your total minutes and weekly productivity trends.
 
 1. Clone the repository  
    ```bash
-   git clone https://github.com/yourusername/FocusTimerPlus.git
+   git clone [(https://github.com/rabbitrunout/iOSApp3)]
