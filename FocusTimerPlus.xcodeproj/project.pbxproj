@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		8002E0442EA9275800078A51 /* FocusTimerPlus Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 8002E0432EA9275800078A51 /* FocusTimerPlus Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8002E08A2EA9A0BC00078A51 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8002E0892EA9A0BC00078A51 /* WidgetKit.framework */; };
+		8002E08C2EA9A0BC00078A51 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8002E08B2EA9A0BC00078A51 /* SwiftUI.framework */; };
+		8002E0992EA9A0BD00078A51 /* FocusTimerPlusComplicationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8002E0872EA9A0BC00078A51 /* FocusTimerPlusComplicationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -17,6 +20,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8002E0422EA9275800078A51;
 			remoteInfo = "FocusTimerPlus Watch App";
+		};
+		8002E0972EA9A0BD00078A51 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8002E0372EA9275800078A51 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8002E0862EA9A0BC00078A51;
+			remoteInfo = FocusTimerPlusComplicationExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -32,17 +42,49 @@
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8002E0822EA9A05500078A51 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8002E0992EA9A0BD00078A51 /* FocusTimerPlusComplicationExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		8002E03D2EA9275800078A51 /* FocusTimerPlus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FocusTimerPlus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8002E0432EA9275800078A51 /* FocusTimerPlus Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FocusTimerPlus Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8002E0872EA9A0BC00078A51 /* FocusTimerPlusComplicationExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FocusTimerPlusComplicationExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		8002E0892EA9A0BC00078A51 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		8002E08B2EA9A0BC00078A51 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8002E09A2EA9A0BD00078A51 /* Exceptions for "FocusTimerPlusComplication" folder in "FocusTimerPlusComplicationExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 8002E0862EA9A0BC00078A51 /* FocusTimerPlusComplicationExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		8002E0472EA9275800078A51 /* FocusTimerPlus Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "FocusTimerPlus Watch App";
+			sourceTree = "<group>";
+		};
+		8002E08D2EA9A0BC00078A51 /* FocusTimerPlusComplication */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8002E09A2EA9A0BD00078A51 /* Exceptions for "FocusTimerPlusComplication" folder in "FocusTimerPlusComplicationExtension" target */,
+			);
+			path = FocusTimerPlusComplication;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -55,6 +97,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8002E0842EA9A0BC00078A51 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8002E08C2EA9A0BC00078A51 /* SwiftUI.framework in Frameworks */,
+				8002E08A2EA9A0BC00078A51 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -62,6 +113,8 @@
 			isa = PBXGroup;
 			children = (
 				8002E0472EA9275800078A51 /* FocusTimerPlus Watch App */,
+				8002E08D2EA9A0BC00078A51 /* FocusTimerPlusComplication */,
+				8002E0882EA9A0BC00078A51 /* Frameworks */,
 				8002E03E2EA9275800078A51 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -71,8 +124,18 @@
 			children = (
 				8002E03D2EA9275800078A51 /* FocusTimerPlus.app */,
 				8002E0432EA9275800078A51 /* FocusTimerPlus Watch App.app */,
+				8002E0872EA9A0BC00078A51 /* FocusTimerPlusComplicationExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		8002E0882EA9A0BC00078A51 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8002E0892EA9A0BC00078A51 /* WidgetKit.framework */,
+				8002E08B2EA9A0BC00078A51 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -104,10 +167,12 @@
 				8002E03F2EA9275800078A51 /* Sources */,
 				8002E0402EA9275800078A51 /* Frameworks */,
 				8002E0412EA9275800078A51 /* Resources */,
+				8002E0822EA9A05500078A51 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				8002E0982EA9A0BD00078A51 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				8002E0472EA9275800078A51 /* FocusTimerPlus Watch App */,
@@ -118,6 +183,28 @@
 			productName = "FocusTimerPlus Watch App";
 			productReference = 8002E0432EA9275800078A51 /* FocusTimerPlus Watch App.app */;
 			productType = "com.apple.product-type.application";
+		};
+		8002E0862EA9A0BC00078A51 /* FocusTimerPlusComplicationExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8002E09B2EA9A0BD00078A51 /* Build configuration list for PBXNativeTarget "FocusTimerPlusComplicationExtension" */;
+			buildPhases = (
+				8002E0832EA9A0BC00078A51 /* Sources */,
+				8002E0842EA9A0BC00078A51 /* Frameworks */,
+				8002E0852EA9A0BC00078A51 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				8002E08D2EA9A0BC00078A51 /* FocusTimerPlusComplication */,
+			);
+			name = FocusTimerPlusComplicationExtension;
+			packageProductDependencies = (
+			);
+			productName = FocusTimerPlusComplicationExtension;
+			productReference = 8002E0872EA9A0BC00078A51 /* FocusTimerPlusComplicationExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -133,6 +220,9 @@
 						CreatedOnToolsVersion = 26.0.1;
 					};
 					8002E0422EA9275800078A51 = {
+						CreatedOnToolsVersion = 26.0.1;
+					};
+					8002E0862EA9A0BC00078A51 = {
 						CreatedOnToolsVersion = 26.0.1;
 					};
 				};
@@ -153,6 +243,7 @@
 			targets = (
 				8002E03C2EA9275800078A51 /* FocusTimerPlus */,
 				8002E0422EA9275800078A51 /* FocusTimerPlus Watch App */,
+				8002E0862EA9A0BC00078A51 /* FocusTimerPlusComplicationExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -172,10 +263,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8002E0852EA9A0BC00078A51 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8002E03F2EA9275800078A51 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8002E0832EA9A0BC00078A51 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -189,6 +294,11 @@
 			isa = PBXTargetDependency;
 			target = 8002E0422EA9275800078A51 /* FocusTimerPlus Watch App */;
 			targetProxy = 8002E0452EA9275800078A51 /* PBXContainerItemProxy */;
+		};
+		8002E0982EA9A0BD00078A51 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8002E0862EA9A0BC00078A51 /* FocusTimerPlusComplicationExtension */;
+			targetProxy = 8002E0972EA9A0BD00078A51 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -314,6 +424,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A3LWML52M7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = FocusTimerPlus;
@@ -346,6 +457,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A3LWML52M7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = FocusTimerPlus;
@@ -377,6 +489,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A3LWML52M7;
 				INFOPLIST_KEY_CFBundleDisplayName = FocusTimerPlus;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "irinalsk.fox1-gmail.com.FocusTimerPlus";
@@ -393,6 +506,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A3LWML52M7;
 				INFOPLIST_KEY_CFBundleDisplayName = FocusTimerPlus;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "irinalsk.fox1-gmail.com.FocusTimerPlus";
@@ -402,6 +516,73 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8002E09C2EA9A0BD00078A51 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A3LWML52M7;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FocusTimerPlusComplication/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FocusTimerPlusComplication;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "irinalsk.fox1-gmail.com.FocusTimerPlus.watchkitapp.FocusTimerPlusComplication";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
+			};
+			name = Debug;
+		};
+		8002E09D2EA9A0BD00078A51 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = A3LWML52M7;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FocusTimerPlusComplication/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FocusTimerPlusComplication;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "irinalsk.fox1-gmail.com.FocusTimerPlus.watchkitapp.FocusTimerPlusComplication";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Release;
 		};
@@ -431,6 +612,15 @@
 			buildConfigurations = (
 				8002E0552EA9275900078A51 /* Debug */,
 				8002E0562EA9275900078A51 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8002E09B2EA9A0BD00078A51 /* Build configuration list for PBXNativeTarget "FocusTimerPlusComplicationExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8002E09C2EA9A0BD00078A51 /* Debug */,
+				8002E09D2EA9A0BD00078A51 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
