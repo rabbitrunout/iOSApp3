@@ -17,9 +17,9 @@ enum FocusCategory: String, CaseIterable, Identifiable, Codable {
 
     var description: String {
         switch self {
-        case .work: return "Concentrate on tasks and coding"
-        case .study: return "Learn, read, or take notes"
-        case .meditation: return "Relax and clear your mind"
+        case .work: return "Concentrate on your projects and tasks"
+        case .study: return "Focus on learning and reading"
+        case .meditation: return "Relax, breathe, and clear your thoughts"
         }
     }
 

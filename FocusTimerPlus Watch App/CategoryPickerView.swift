@@ -12,7 +12,7 @@ struct CategoryPickerView: View {
                         selectedCategory = cat
                     }
                     WKInterfaceDevice.current().play(.click)
-                    dismiss() // ← автоматический возврат на главный экран
+                    dismiss() // ← автоматически возвращаемся
                 } label: {
                     HStack(spacing: 8) {
                         Text(cat.icon)
@@ -36,4 +36,8 @@ struct CategoryPickerView: View {
         }
         .navigationTitle("Focus Type")
     }
+}
+
+#Preview {
+    CategoryPickerView(selectedCategory: .constant(.work))
 }

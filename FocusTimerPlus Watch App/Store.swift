@@ -4,63 +4,49 @@ import Combine
 
 final class Store: ObservableObject {
     // MARK: - App Settings
-    @AppStorage("theme") private var themeRawValue: String = Theme.automatic.rawValue {
-        didSet { updateTheme() }
+    @Published var defaultMinutes: Int = UserDefaults.standard.integer(forKey: "defaultMinutes") == 0
+        ? 5 : UserDefaults.standard.integer(forKey: "defaultMinutes")
+
+    @Published var hapticsEnabled: Bool = UserDefaults.standard.bool(forKey: "hapticsEnabled")
+
+    @Published var currentTheme: ColorScheme? = nil {
+        didSet {
+            if let theme = currentTheme {
+                UserDefaults.standard.set(theme == .dark ? "dark" : "light", forKey: "theme")
+            } else {
+                UserDefaults.standard.set("system", forKey: "theme")
+            }
+        }
     }
 
-    @AppStorage("hapticsEnabled") var hapticsEnabled: Bool = true
-    @AppStorage("defaultMinutes") var defaultMinutes: Int = 5
-
-    @Published var currentTheme: Theme = .automatic
-
-    private func updateTheme() {
-        currentTheme = Theme(rawValue: themeRawValue) ?? .automatic
-        WKInterfaceDevice.current().play(.click) // тактильный отклик при смене темы
-    }
-
-    // MARK: - Sessions
+    // MARK: - Focus Sessions
     @Published var sessions: [Session] = []
 
-    struct Session: Identifiable, Codable {
-        let id: UUID
+    struct Session: Identifiable, Codable, Equatable {
+        let id = UUID()
         let date: Date
         let minutes: Int
         let completed: Bool
         let category: FocusCategory
+    }
 
-        init(minutes: Int, completed: Bool, category: FocusCategory) {
-            self.id = UUID()
-            self.date = Date()
-            self.minutes = minutes
-            self.completed = completed
-            self.category = category
+    init() {
+        load()
+        let savedTheme = UserDefaults.standard.string(forKey: "theme")
+        switch savedTheme {
+        case "dark": currentTheme = .dark
+        case "light": currentTheme = .light
+        default: currentTheme = nil
         }
     }
 
-
-    enum Theme: String, CaseIterable, Identifiable {
-        case automatic = "Automatic"
-        case light = "Light"
-        case dark = "Dark"
-        var id: String { rawValue }
-    }
-
-    func addSession(minutes: Int, completed: Bool, category: FocusCategory) {
-        let new = Session(minutes: minutes, completed: completed, category: category)
-        sessions.append(new)
-        save()
-    }
-
-
-    func clearHistory() {
-        sessions.removeAll()
-        save()
-    }
-
+    // MARK: - Save / Load
     func save() {
         if let data = try? JSONEncoder().encode(sessions) {
             UserDefaults.standard.set(data, forKey: "sessions")
         }
+        UserDefaults.standard.set(defaultMinutes, forKey: "defaultMinutes")
+        UserDefaults.standard.set(hapticsEnabled, forKey: "hapticsEnabled")
     }
 
     func load() {
@@ -70,17 +56,14 @@ final class Store: ObservableObject {
         }
     }
 
-    init() {
-        load()
-        updateTheme()
+    func addSession(minutes: Int, completed: Bool, category: FocusCategory) {
+        let new = Session(date: Date(), minutes: minutes, completed: completed, category: category)
+        sessions.append(new)
+        save()
     }
 
-    // MARK: - Theme Picker Binding
-    var themeRaw: String {
-        get { themeRawValue }
-        set {
-            themeRawValue = newValue
-            updateTheme()
-        }
+    func clearHistory() {
+        sessions.removeAll()
+        save()
     }
 }
