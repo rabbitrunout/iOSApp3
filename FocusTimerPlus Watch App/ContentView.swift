@@ -1,14 +1,24 @@
+//
+//  ContentView.swift
+//  FocusTimerPlus Watch App
+//
+//  Created by Irina Saf on 2025-10-22.
+//
+
 import SwiftUI
 import WidgetKit
 
 struct ContentView: View {
     @EnvironmentObject var store: Store
     @StateObject private var timer = TimerManager()
+    @StateObject private var achievements = AchievementsManager()
 
     @State private var minutes: Double = 5
+    @State private var category: FocusCategory = .work
     @State private var crownValue: Double = 5
     @State private var showCongrats = false
-    @State private var glowPulse = false
+    @State private var achievedTitles: [String] = []
+    @State private var animateColor = false
 
     private var progress: Double {
         guard timer.totalSeconds > 0 else { return 0 }
@@ -16,55 +26,78 @@ struct ContentView: View {
     }
 
     var body: some View {
-        NavigationStack {        // ✅ теперь работает переход по NavigationLink
+        NavigationStack {
             ZStack {
+                // 🌈 Фон меняется с категорией
                 LinearGradient(
-                    colors: [Color.black, Color(red: 0.08, green: 0.08, blue: 0.25)],
-                    startPoint: .top,
-                    endPoint: .bottom
+                    colors: store.currentTheme == .dark
+                        ? category.colorGradient.map { $0.opacity(0.3) } + [Color.black]
+                        : category.colorGradient.map { $0.opacity(0.15) } + [Color.white],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
                 )
                 .ignoresSafeArea()
+                .animation(.easeInOut(duration: 0.8), value: category)
 
                 ScrollView {
                     VStack(spacing: 14) {
-                        // ⚙️ Шестерёнка
+                        // ⚙ Настройки
                         HStack {
                             Spacer()
                             NavigationLink(destination: SettingsView()) {
                                 Image(systemName: "gearshape.fill")
                                     .font(.system(size: 22, weight: .medium))
-                                    .foregroundStyle(.cyan)
-                                    .shadow(color: .cyan.opacity(0.7), radius: 4)
+                                    .foregroundStyle(category.colorGradient.first!)
+                                    .shadow(color: category.colorGradient.last!.opacity(0.7), radius: 4)
                                     .padding(.trailing, 6)
-                                    .padding(.top, 6)
                             }
                         }
 
-                        // 🕓 Круг таймера
+                        // 🔹 Кнопка выбора категории
+                        NavigationLink(destination: CategoryPickerView(selectedCategory: $category)) {
+                            HStack {
+                                Text(category.icon)
+                                    .font(.title3)
+                                Text(category.rawValue)
+                                    .font(.footnote)
+                                Image(systemName: "chevron.right")
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                            }
+                            .padding(6)
+                            .frame(maxWidth: .infinity)
+                            .background(.ultraThinMaterial.opacity(0.25))
+                            .cornerRadius(10)
+                        }
+
+                        // 🕓 Центральный круг с иконкой категории
                         ZStack {
-                            Circle().stroke(.white.opacity(0.08), lineWidth: 8)
+                            Circle()
+                                .stroke(.white.opacity(0.1), lineWidth: 8)
 
                             Circle()
                                 .trim(from: 0, to: progress)
                                 .stroke(
-                                    AngularGradient(gradient: Gradient(colors: [.cyan, .blue, .purple]),
-                                                    center: .center),
+                                    AngularGradient(
+                                        gradient: Gradient(colors: animateColor ? category.colorGradient.reversed() : category.colorGradient),
+                                        center: .center
+                                    ),
                                     style: StrokeStyle(lineWidth: 8, lineCap: .round)
                                 )
                                 .rotationEffect(.degrees(-90))
-                                .shadow(color: .cyan.opacity(0.6), radius: glowPulse ? 14 : 6)
-                                .animation(glowPulse ?
-                                           .easeInOut(duration: 1.4).repeatForever(autoreverses: true)
-                                           : .default,
-                                           value: glowPulse)
-                                .animation(.easeInOut(duration: 0.3), value: progress)
+                                .shadow(color: category.colorGradient.first!.opacity(0.6), radius: 8)
+                                .animation(.easeInOut(duration: 0.8), value: animateColor)
 
                             VStack(spacing: 3) {
+                                // 💻 Значок категории
+                                Text(category.icon)
+                                    .font(.system(size: 26))
+                                    .transition(.opacity.combined(with: .scale))
+                                    .animation(.easeInOut(duration: 0.4), value: category)
+
                                 Text(timeString(timer.remainingSeconds))
                                     .font(.system(size: 30, weight: .bold, design: .rounded))
-                                    .monospacedDigit()
-                                    .foregroundColor(.white)
-                                    .shadow(color: .cyan.opacity(0.7), radius: 5)
+                                    .foregroundColor(store.currentTheme == .dark ? .white : .black)
 
                                 Text(labelText)
                                     .font(.caption2)
@@ -72,15 +105,9 @@ struct ContentView: View {
                             }
                         }
                         .frame(width: 110, height: 110)
-                        .padding(.top, 8)
+                        .padding(.top, 10)
                         .focusable(true)
-                        .digitalCrownRotation(
-                            $crownValue,
-                            from: 1, through: 60, by: 1,
-                            sensitivity: .medium,
-                            isContinuous: false,
-                            isHapticFeedbackEnabled: true
-                        )
+                        .digitalCrownRotation($crownValue, from: 1, through: 60, by: 1, sensitivity: .medium)
                         .onChange(of: crownValue) { _, newVal in
                             guard timer.state == .idle else { return }
                             minutes = newVal.rounded()
@@ -89,19 +116,18 @@ struct ContentView: View {
 
                         // ➕➖ Минуты
                         HStack(spacing: 20) {
-                            neonIconButton(systemName: "minus.circle.fill", color: .blue) { adjustMinutes(-1) }
+                            neonIconButton(systemName: "minus.circle.fill", color: category.colorGradient.first!) { adjustMinutes(-1) }
                             Text("\(Int(minutes)) min")
                                 .font(.headline)
-                                .foregroundColor(.white)
-                                .shadow(color: .cyan.opacity(0.6), radius: 5)
-                            neonIconButton(systemName: "plus.circle.fill", color: .purple) { adjustMinutes(1) }
+                                .foregroundColor(store.currentTheme == .dark ? .white : .black)
+                            neonIconButton(systemName: "plus.circle.fill", color: category.colorGradient.last!) { adjustMinutes(1) }
                         }
 
                         // ▶️ Управление
                         HStack(spacing: 8) {
                             switch timer.state {
                             case .idle:
-                                neonButton("Start", color: .cyan) { start() }
+                                neonButton("Start", color: category.colorGradient.first!) { start() }
                             case .running:
                                 neonButton("Pause", color: .orange) { timer.pause() }
                                 neonButton("Reset", color: .red) { reset() }
@@ -114,74 +140,57 @@ struct ContentView: View {
                         }
                         .padding(.top, 6)
 
-                        // 📜 История
+                        // 🧾 История
                         NavigationLink("View History") { HistoryView() }
                             .font(.caption2)
-                            .foregroundStyle(.cyan.opacity(0.8))
-                            .padding(.top, 4)
-                            .padding(.bottom, 10)
+                            .foregroundStyle(category.colorGradient.first!.opacity(0.8))
+                            .padding(.bottom, 6)
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 6)
+                    .padding(.horizontal)
                 }
-                .allowsHitTesting(!showCongrats)
 
-                // 🎉 Экран поздравления
+                // 🎉 Экран достижений
                 if showCongrats {
                     ZStack {
                         Color.black.opacity(0.85).ignoresSafeArea()
                         VStack(spacing: 10) {
-                            Text("🎉 Well done!")
-                                .font(.title2.bold())
-                                .foregroundStyle(.white)
-                                .shadow(color: .cyan.opacity(0.8), radius: 10)
-                            Text("+\(Int(minutes)) min added to History")
-                                .font(.footnote)
-                                .foregroundStyle(.secondary)
+                            Text("🎉 Great job!")
+                                .font(.title3.bold())
+                                .foregroundColor(.white)
+                            ForEach(achievedTitles, id: \.self) { title in
+                                Text(title)
+                                    .font(.footnote)
+                                    .foregroundColor(.cyan)
+                            }
                         }
-                        .transition(.opacity.combined(with: .scale))
+                        .transition(.opacity)
                     }
                 }
             }
-            .task {
-                await requestNotificationPermission()
-                minutes = 5
-                crownValue = 5
-                timer.allowHaptics = store.hapticsEnabled
-                timer.configure(minutes: 5)
-            }
-            .onChange(of: timer.state) { _, newState in
-                if newState == .finished { WKInterfaceDevice.current().play(.notification) }
-            }
+        }
+        .onChange(of: category) { _, _ in
+            withAnimation(.easeInOut(duration: 0.6)) { animateColor.toggle() }
+            WKInterfaceDevice.current().play(.click)
         }
     }
 
-    // MARK: - Neon Buttons
+    // MARK: - Helpers
     private func neonButton(_ title: String, color: Color, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Text(title)
                 .font(.system(size: 14, weight: .semibold))
                 .frame(width: 80, height: 32)
-                .background(RoundedRectangle(cornerRadius: 10)
-                    .fill(color.opacity(0.25))
-                    .shadow(color: color.opacity(0.7), radius: 8))
-                .overlay(RoundedRectangle(cornerRadius: 10)
-                    .stroke(color.opacity(0.5), lineWidth: 1))
+                .background(RoundedRectangle(cornerRadius: 10).fill(color.opacity(0.25)))
+                .overlay(RoundedRectangle(cornerRadius: 10).stroke(color.opacity(0.5)))
         }
-        .foregroundColor(.white)
     }
 
     private func neonIconButton(systemName: String, color: Color, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            Image(systemName: systemName)
-                .font(.title3)
-                .foregroundStyle(color)
-                .shadow(color: color.opacity(0.8), radius: 8)
+            Image(systemName: systemName).foregroundStyle(color)
         }
     }
 
-    // MARK: - Logic
     private func adjustMinutes(_ delta: Int) {
         guard timer.state == .idle else { return }
         minutes = min(max(minutes + Double(delta), 1), 60)
@@ -200,27 +209,20 @@ struct ContentView: View {
 
     private func start() {
         timer.configure(minutes: Int(minutes))
-        withAnimation(.spring()) { timer.start() }
+        timer.start()
     }
 
-    private func reset() { withAnimation(.spring()) { timer.reset() } }
+    private func reset() { timer.reset() }
 
     private func doneSession() {
-        store.addSession(minutes: Int(minutes), completed: true)
-        let todayMinutes = store.sessions
-            .filter { Calendar.current.isDateInToday($0.date) }
-            .map(\.minutes)
-            .reduce(0, +)
-        UserDefaults.standard.set(todayMinutes, forKey: "minutesToday")
-        WidgetCenter.shared.reloadAllTimelines()
-        WKInterfaceDevice.current().play(.success)
-        withAnimation(.easeInOut(duration: 0.4)) {
-            showCongrats = true; glowPulse = true
-        }
+        store.addSession(minutes: Int(minutes), completed: true, category: category)
+
+        let newAchievements = achievements.registerSession(minutes: Int(minutes))
+        achievedTitles = newAchievements
+        withAnimation(.easeInOut(duration: 0.4)) { showCongrats = true }
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            withAnimation(.easeInOut(duration: 0.6)) {
-                showCongrats = false; glowPulse = false; timer.reset()
-            }
+            withAnimation { showCongrats = false }
+            timer.reset()
         }
     }
 
@@ -228,11 +230,8 @@ struct ContentView: View {
         let m = seconds / 60, s = seconds % 60
         return String(format: "%02d:%02d", m, s)
     }
-
-    private func requestNotificationPermission() async {
-        try? await UNUserNotificationCenter.current()
-            .requestAuthorization(options: [.alert, .sound])
-    }
 }
 
-#Preview { ContentView().environmentObject(Store()) }
+#Preview {
+    ContentView().environmentObject(Store())
+}

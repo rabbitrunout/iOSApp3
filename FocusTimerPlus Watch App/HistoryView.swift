@@ -12,120 +12,116 @@ struct HistoryView: View {
     @EnvironmentObject var store: Store
     @State private var animateBars = false
 
+    private var weeklyTotal: Int {
+        store.sessions
+            .filter { Calendar.current.isDate($0.date, equalTo: .now, toGranularity: .weekOfYear) }
+            .map(\.minutes)
+            .reduce(0, +)
+    }
+
+    private var avgSession: Int {
+        guard !store.sessions.isEmpty else { return 0 }
+        return store.sessions.map(\.minutes).reduce(0, +) / store.sessions.count
+    }
+
     var body: some View {
         ZStack {
-            // 🌌 Неоновый фон
             LinearGradient(
-                colors: [Color.black, Color(red: 0.1, green: 0.0, blue: 0.25)],
+                colors: store.currentTheme == .dark
+                    ? [Color.black, Color(red: 0.05, green: 0.05, blue: 0.25)]
+                    : [Color(red: 0.95, green: 0.97, blue: 1.0), Color.white],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
 
             ScrollView {
-                VStack(alignment: .leading, spacing: 12) {
-                    // 🔷 Заголовок
-                    Text("History")
-                        .font(.system(size: 20, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                        .shadow(color: .cyan.opacity(0.7), radius: 8)
-                        .padding(.bottom, 4)
+                VStack(spacing: 12) {
+                    // 📊 Заголовок
+                    Text("Weekly Summary")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(store.currentTheme == .dark ? .white : .black)
 
-                    if store.sessions.isEmpty {
-                        Text("No sessions yet")
-                            .foregroundStyle(.secondary)
-                            .padding(.top, 20)
-                    } else {
-                        // 📊 Диаграмма с плавным появлением
-                        Chart(store.sessions) { s in
-                            BarMark(
-                                x: .value("Date", s.date, unit: .day),
-                                y: .value("Minutes", animateBars ? s.minutes : 0)
-                            )
-                            .foregroundStyle(
-                                LinearGradient(
-                                    colors: [.cyan, .purple],
-                                    startPoint: .bottom,
-                                    endPoint: .top
+                    // 💡 Статистика недели
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("This Week")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Text("\(weeklyTotal) min")
+                                .font(.headline.bold())
+                        }
+                        Spacer()
+                        VStack(alignment: .trailing) {
+                            Text("Average Session")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            Text("\(avgSession) min")
+                                .font(.headline.bold())
+                        }
+                    }
+                    .padding()
+                    .background(.ultraThinMaterial.opacity(0.2))
+                    .cornerRadius(10)
+
+                    // 📈 График по категориям
+                    if !store.sessions.isEmpty {
+                        Chart {
+                            ForEach(store.sessions.sorted(by: { $0.date < $1.date })) { s in
+                                BarMark(
+                                    x: .value("Date", s.date, unit: .day),
+                                    y: .value("Minutes", animateBars ? s.minutes : 0)
                                 )
-                            )
-                            .cornerRadius(4)
-                            .shadow(color: .cyan.opacity(0.4), radius: 3, y: 1)
-                        }
-                        .frame(height: 80)
-                        .padding(.bottom, 8)
-                        .chartYAxis(.hidden)
-                        .chartXAxis {
-                            AxisMarks(values: .stride(by: .day)) { _ in
-                                AxisValueLabel(format: .dateTime.day().weekday(), centered: true)
+                                .foregroundStyle(
+                                    LinearGradient(
+                                        colors: s.category.colorGradient,
+                                        startPoint: .top,
+                                        endPoint: .bottom
+                                    )
+                                )
+                                .cornerRadius(3)
                             }
                         }
-                        .onAppear {
-                            // 🚀 Анимация появления столбиков
-                            withAnimation(.easeOut(duration: 0.9)) {
-                                animateBars = true
-                            }
-                        }
+                        .frame(height: 130)
+                        .onAppear { withAnimation(.easeOut(duration: 1)) { animateBars = true } }
+                    }
 
-                        // 📅 Список сессий
+                    // 📜 Список сессий
+                    if !store.sessions.isEmpty {
                         VStack(alignment: .leading, spacing: 6) {
                             ForEach(store.sessions.sorted(by: { $0.date > $1.date })) { s in
                                 HStack {
-                                    Text(s.date, style: .date)
-                                        .font(.caption)
-                                        .foregroundStyle(.white.opacity(0.8))
+                                    Text(s.category.icon)
+                                        .font(.title3)
+                                        .shadow(color: s.category.colorGradient.first!.opacity(0.6), radius: 5)
+                                    VStack(alignment: .leading) {
+                                        Text(s.date, style: .date)
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                        Text("\(s.minutes) min • \(s.category.rawValue)")
+                                            .font(.footnote)
+                                            .foregroundStyle(s.category.colorGradient.first!)
+                                    }
                                     Spacer()
-                                    Text("\(s.minutes) min")
-                                        .font(.caption2.bold())
-                                        .foregroundStyle(s.completed ? .green : .secondary)
                                 }
+                                .padding(.vertical, 3)
                                 .padding(.horizontal, 6)
-                                .padding(.vertical, 4)
-                                .background(Color.white.opacity(0.05))
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                            }
-                        }
-
-                        // 🧮 Итого за сегодня
-                        let todayTotal = store.sessions
-                            .filter { Calendar.current.isDateInToday($0.date) }
-                            .map(\.minutes)
-                            .reduce(0, +)
-
-                        if todayTotal > 0 {
-                            Text("Total today: \(todayTotal) min")
-                                .font(.caption2.bold())
-                                .foregroundStyle(.cyan)
-                                .padding(.top, 6)
-                        }
-
-                        // 🗑 Кнопка очистки
-                        Button(role: .destructive) {
-                            store.clearHistory()
-                        } label: {
-                            Label("Clear History", systemImage: "trash.fill")
-                                .font(.caption.bold())
-                                .foregroundStyle(.white)
-                                .padding(.vertical, 4)
-                                .frame(maxWidth: .infinity)
                                 .background(
                                     RoundedRectangle(cornerRadius: 8)
-                                        .fill(Color.red.opacity(0.25))
+                                        .fill(s.category.colorGradient.first!.opacity(store.currentTheme == .dark ? 0.1 : 0.15))
                                 )
-                                .shadow(color: .red.opacity(0.5), radius: 4)
+                            }
                         }
-                        .buttonStyle(.plain)
                         .padding(.top, 8)
+                    } else {
+                        Text("No sessions yet")
+                            .foregroundStyle(.secondary)
+                            .padding(.top, 20)
                     }
                 }
-                .padding(.horizontal, 8)
-                .padding(.vertical, 10)
+                .padding()
             }
         }
-        .preferredColorScheme(
-            store.theme == .dark ? .dark :
-            store.theme == .light ? .light : nil
-        )
     }
 }
 

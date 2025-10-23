@@ -1,38 +1,43 @@
-//
-//  Store.swift
-//  FocusTimerPlus Watch App
-//
-//  Created by Irina Saf on 2025-10-22.
-//
-
 import Foundation
 import SwiftUI
 import Combine
 
 final class Store: ObservableObject {
-    // MARK: - Persistent Settings
-    @AppStorage("theme") var themeRaw: String = Theme.automatic.rawValue
+    // MARK: - App Settings
+    @AppStorage("theme") private var themeRawValue: String = Theme.automatic.rawValue {
+        didSet { updateTheme() }
+    }
+
     @AppStorage("hapticsEnabled") var hapticsEnabled: Bool = true
     @AppStorage("defaultMinutes") var defaultMinutes: Int = 5
 
-    // MARK: - Session History
+    @Published var currentTheme: Theme = .automatic
+
+    private func updateTheme() {
+        currentTheme = Theme(rawValue: themeRawValue) ?? .automatic
+        WKInterfaceDevice.current().play(.click) // тактильный отклик при смене темы
+    }
+
+    // MARK: - Sessions
     @Published var sessions: [Session] = []
 
-    struct Session: Identifiable, Codable, Equatable {
+    struct Session: Identifiable, Codable {
         let id: UUID
-        let minutes: Int
         let date: Date
+        let minutes: Int
         let completed: Bool
+        let category: FocusCategory
 
-        init(id: UUID = UUID(), minutes: Int, date: Date = .now, completed: Bool) {
-            self.id = id
+        init(minutes: Int, completed: Bool, category: FocusCategory) {
+            self.id = UUID()
+            self.date = Date()
             self.minutes = minutes
-            self.date = date
             self.completed = completed
+            self.category = category
         }
     }
 
-    // MARK: - Theme Enum
+
     enum Theme: String, CaseIterable, Identifiable {
         case automatic = "Automatic"
         case light = "Light"
@@ -40,16 +45,12 @@ final class Store: ObservableObject {
         var id: String { rawValue }
     }
 
-    var theme: Theme {
-        get { Theme(rawValue: themeRaw) ?? .automatic }
-        set { themeRaw = newValue.rawValue }
-    }
-
-    // MARK: - Session Management
-    func addSession(minutes: Int, completed: Bool) {
-        sessions.append(Session(minutes: minutes, completed: completed))
+    func addSession(minutes: Int, completed: Bool, category: FocusCategory) {
+        let new = Session(minutes: minutes, completed: completed, category: category)
+        sessions.append(new)
         save()
     }
+
 
     func clearHistory() {
         sessions.removeAll()
@@ -71,5 +72,15 @@ final class Store: ObservableObject {
 
     init() {
         load()
+        updateTheme()
+    }
+
+    // MARK: - Theme Picker Binding
+    var themeRaw: String {
+        get { themeRawValue }
+        set {
+            themeRawValue = newValue
+            updateTheme()
+        }
     }
 }
