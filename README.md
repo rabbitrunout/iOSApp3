@@ -16,7 +16,7 @@ Easily adjust session length with Digital Crown or +/− buttons.
 
 ## ⚙️ Settings Screen  
 
-![Settings Screen](assets/7.png) (![Settings Screen](assets/8.png)
+![Settings Screen](assets/7.png) ![Settings Screen](assets/8.png)
 
 Customize your default session duration, theme (Dark / Light / System), and haptic feedback preferences.
 
