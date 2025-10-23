@@ -1,10 +1,3 @@
-//
-//  CategoryPickerView.swift
-//  FocusTimerPlus Watch App
-//
-//  Created by Irina Saf on 2025-10-22.
-//
-
 import SwiftUI
 
 struct CategoryPickerView: View {
@@ -21,11 +14,16 @@ struct CategoryPickerView: View {
                     WKInterfaceDevice.current().play(.click)
                     dismiss() // ← автоматический возврат на главный экран
                 } label: {
-                    HStack {
+                    HStack(spacing: 8) {
                         Text(cat.icon)
-                            .font(.title3)
-                        Text(cat.rawValue)
-                            .font(.body)
+                            .font(.title2)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(cat.rawValue)
+                                .font(.body.bold())
+                            Text(cat.description)
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
                         Spacer()
                         if cat == selectedCategory {
                             Image(systemName: "checkmark.circle.fill")
@@ -38,10 +36,4 @@ struct CategoryPickerView: View {
         }
         .navigationTitle("Focus Type")
     }
-}
-
-
-#Preview {
-    @State var previewCategory: FocusCategory = .work
-    return CategoryPickerView(selectedCategory: $previewCategory)
 }
